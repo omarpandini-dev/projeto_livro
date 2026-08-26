@@ -264,6 +264,7 @@ h2 {
 }
 
 .reader-section {
+  display: none;
   min-height: 100svh;
   background: #14213d;
   color: #fff;
