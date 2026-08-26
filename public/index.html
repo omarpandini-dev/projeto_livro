@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mundo Encantado</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.min.js" defer></script>
+    <script src="/app.js" type="module"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#inicio" aria-label="Mundo Encantado">
+        <span class="brand-mark">ME</span>
+        <span>Mundo Encantado</span>
+      </a>
+      <nav class="top-nav" aria-label="Navegacao principal">
+        <a href="#livros">Livros</a>
+        <a href="#leitor">Leitor</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero" id="inicio">
+        <div class="hero-media" aria-hidden="true">
+          <img id="heroImage" src="/assets/livros/livro1/img/1_202608261031.jpeg" alt="">
+        </div>
+        <div class="hero-shade"></div>
+        <div class="hero-content">
+          <p class="eyebrow">Biblioteca digital</p>
+          <h1>Mundo Encantado</h1>
+          <p class="hero-copy">
+            Uma estante interativa para explorar livros ilustrados, abrir paginas em tela cheia
+            e navegar como se estivesse folheando uma edicao impressa.
+          </p>
+          <a class="hero-action" href="#livros">Acessar livros</a>
+        </div>
+      </section>
+
+      <section class="library-section" id="livros" aria-labelledby="library-title">
+        <div class="section-heading">
+          <p class="eyebrow">Acervo</p>
+          <h2 id="library-title">Livros disponiveis</h2>
+        </div>
+        <div class="books-grid" id="booksGrid" aria-live="polite"></div>
+      </section>
+
+      <section class="reader-section" id="leitor" aria-labelledby="reader-title">
+        <div class="reader-heading">
+          <div>
+            <p class="eyebrow">Leitor</p>
+            <h2 id="reader-title">Escolha um livro</h2>
+          </div>
+          <div class="reader-actions" aria-label="Controles do leitor">
+            <button class="icon-button" id="prevPage" type="button" title="Pagina anterior" aria-label="Pagina anterior">
+              <span aria-hidden="true">‹</span>
+            </button>
+            <button class="icon-button" id="nextPage" type="button" title="Proxima pagina" aria-label="Proxima pagina">
+              <span aria-hidden="true">›</span>
+            </button>
+            <button class="icon-button close-reader" id="closeReader" type="button" title="Fechar leitor" aria-label="Fechar leitor">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="reader-shell">
+          <div class="book-stage" id="bookStage">
+            <p class="empty-reader">Selecione um livro para comecar.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

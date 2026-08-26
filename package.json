@@ -1,0 +1,13 @@
+{
+  "name": "mundo-encantado",
+  "version": "1.0.0",
+  "description": "Biblioteca moderna de livros digitais com leitor de paginas.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
