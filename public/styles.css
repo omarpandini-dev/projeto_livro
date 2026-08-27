@@ -315,6 +315,11 @@ body.reader-active .reader-heading {
   cursor: pointer;
 }
 
+.icon-button[aria-pressed="true"] {
+  border-color: rgba(242, 184, 75, 0.72);
+  background: rgba(242, 184, 75, 0.22);
+}
+
 .icon-button span {
   transform: translateY(-1px);
   font-size: 2rem;

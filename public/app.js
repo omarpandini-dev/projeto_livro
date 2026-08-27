@@ -4,11 +4,14 @@ const readerTitle = document.querySelector("#reader-title");
 const bookStage = document.querySelector("#bookStage");
 const prevButton = document.querySelector("#prevPage");
 const nextButton = document.querySelector("#nextPage");
+const toggleAudioButton = document.querySelector("#toggleAudio");
 const closeButton = document.querySelector("#closeReader");
 
 let books = [];
 let pageFlip = null;
 let currentBook = null;
+let currentAudio = null;
+let isAudioMuted = false;
 
 function pageFlipLibrary() {
   return window.St?.PageFlip;
@@ -19,7 +22,38 @@ function destroyReader() {
     pageFlip.destroy();
     pageFlip = null;
   }
+  stopPageAudio();
   bookStage.innerHTML = "";
+}
+
+function stopPageAudio() {
+  if (!currentAudio) return;
+
+  currentAudio.pause();
+  currentAudio.currentTime = 0;
+  currentAudio = null;
+}
+
+function updateAudioButton() {
+  const icon = toggleAudioButton.querySelector("span");
+  const label = isAudioMuted ? "Ativar audio" : "Desativar audio";
+
+  toggleAudioButton.title = label;
+  toggleAudioButton.setAttribute("aria-label", label);
+  toggleAudioButton.setAttribute("aria-pressed", String(isAudioMuted));
+  icon.textContent = isAudioMuted ? "🔇" : "🔊";
+}
+
+function playPageAudio(pageIndex) {
+  const page = currentBook?.pages?.[pageIndex];
+  stopPageAudio();
+
+  if (isAudioMuted || !page?.audioUrl) return;
+
+  currentAudio = new Audio(page.audioUrl);
+  currentAudio.play().catch(() => {
+    currentAudio = null;
+  });
 }
 
 function renderBooks() {
@@ -117,6 +151,10 @@ function openBook(book) {
   });
 
   pageFlip.loadFromHTML(bookElement.querySelectorAll(".page"));
+  pageFlip.on("flip", (event) => {
+    playPageAudio(event.data);
+  });
+  playPageAudio(pageFlip.getCurrentPageIndex());
   document.querySelector("#leitor").scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
@@ -144,6 +182,20 @@ nextButton.addEventListener("click", () => {
   pageFlip?.flipNext();
 });
 
+toggleAudioButton.addEventListener("click", () => {
+  isAudioMuted = !isAudioMuted;
+  updateAudioButton();
+
+  if (isAudioMuted) {
+    stopPageAudio();
+    return;
+  }
+
+  if (pageFlip) {
+    playPageAudio(pageFlip.getCurrentPageIndex());
+  }
+});
+
 closeButton.addEventListener("click", closeReader);
 
 window.addEventListener("resize", () => {
@@ -167,3 +219,4 @@ async function loadBooks() {
 }
 
 loadBooks();
+updateAudioButton();

@@ -19,7 +19,8 @@ const mimeTypes = new Map([
   [".jpeg", "image/jpeg"],
   [".webp", "image/webp"],
   [".gif", "image/gif"],
-  [".svg", "image/svg+xml"]
+  [".svg", "image/svg+xml"],
+  [".mp3", "audio/mpeg"]
 ]);
 
 const imageExtensions = new Set([".jpg", ".jpeg", ".png", ".webp", ".gif"]);
@@ -61,6 +62,26 @@ function pageNumber(fileName, index) {
   return match ? Number(match[0]) : Number.MAX_SAFE_INTEGER + index;
 }
 
+async function existingMp3ForImage(imagePath, bookSlug) {
+  const parsedPath = path.parse(imagePath);
+  const audioPath = path.join(parsedPath.dir, `${parsedPath.name}.mp3`);
+
+  try {
+    const audioStat = await stat(audioPath);
+    if (!audioStat.isFile()) return null;
+  } catch (error) {
+    if (error.code === "ENOENT") return null;
+    throw error;
+  }
+
+  const relativeToBook = path.relative(path.join(booksDir, bookSlug), audioPath);
+  const urlPath = ["assets", "livros", bookSlug, ...relativeToBook.split(path.sep)]
+    .map(encodeURIComponent)
+    .join("/");
+
+  return `/${urlPath}`;
+}
+
 async function collectImages(directory, bookSlug, list = []) {
   const entries = await readdir(directory, { withFileTypes: true });
 
@@ -84,7 +105,8 @@ async function collectImages(directory, bookSlug, list = []) {
     list.push({
       name: entry.name,
       number: pageNumber(entry.name, list.length),
-      url: `/${urlPath}`
+      url: `/${urlPath}`,
+      audioUrl: await existingMp3ForImage(absolute, bookSlug)
     });
   }
 
